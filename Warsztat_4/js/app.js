@@ -69,7 +69,7 @@ $(function () {
         if (id === null || id === undefined) {
             id = "";
         } else {
-            newBook.setId(id);
+           newBook.setId(id);
         }
 
         addBook(ajaxType, id, newBook);
@@ -81,14 +81,13 @@ $(function () {
         });
     }
 
-    function Book(author, title, isbn, type, publisher) {
-        this.id = Math.floor(Math.random() * 1000000);
+    Book = function (author, title, isbn, type, publisher) {
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.type = type;
         this.publisher = publisher;
-    }
+    };
     Book.prototype.setId = function (id) {
         this.id = id;
     };
@@ -134,15 +133,22 @@ $(function () {
 
     // AJAX
     function ajaxRequest(type, id, book) {
+        let contentType = "text/html; charset=UTF-8";
+        let data = "";
+        if (type === "POST" || type === "PUT") {
+            contentType = "application/json; charset=UTF-8";
+            data = JSON.stringify(book);
+        }
         return $.ajax({
             url: "http://localhost:8282/books/" + id,
             type: type,
-            data: JSON.stringify(book),
-            contentType: "application/json"
+            data: data,
+            contentType: contentType
         }).fail(function (error) {
             console.log(error);
         });
     }
+
 
 
 });
